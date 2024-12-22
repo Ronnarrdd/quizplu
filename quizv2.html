@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Quiz des codes d'articles</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <style>
+    img.article {
+  max-width: 300px;
+  height: auto;
+}
+#answer {
+  font-size: 1.2em;
+  padding: 5px;
+  margin-bottom: 10px;
+  font-family: "Lucida Console", Monaco, monospace;
+  max-width: 100%;
+}
+
+.fade-in {
+  opacity: 0;
+  animation-name: fade-in;
+  animation-duration: 1s;
+  animation-fill-mode: both;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+body::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom right, #0062ff, #ff4800);
+  z-index: -1;
+}
+
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
+  border-radius: 5% 15% 5% 15% / 5% 15% 5% 15%;
+  padding: 2px;
+  height: 80vh;
+  width: 80vw;
+  max-height: 5000px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+  </style>
+</head>
+<body class="text-center">
+  <div class="gradient-bg">
+  <div class="container">
+    <h1 class="text-center">Quiz des codes d'articles</h1>
+    <form>
+      <div class="form-group">
+        <p id="question" class="h3 fade-in"></p>
+        <img id="imgArticle" src="" class="article img-fluid fade-in"><br>
+        <input type="text" id="answer" class="form-control fade-in" pattern="[0-9]*" inputmode="numeric" placeholder="Entrez votre réponse ici">
+      </div>
+      <button type="button" id="submit-button" class="btn btn-primary mx-auto fade-in" disabled>Soumettre</button>
+      <button type="button" id="new-question-button" class="btn btn-secondary mx-auto fade-in" onclick="getRandomArticle()" disabled>Nouvelle question</button>
+      <div class="form-group mt-3">
+        <button type="button" id="answer-button" class="btn btn-warning mx-auto">Donner la réponse</button>
+        <p id="answer-text" class="h4 text-center mt-3"></p>
+      </div>
+    </form>
+    <p id="result" class="h4 text-center"></p>
+    <p id="loading" class="h4 text-center" style="display:none;">Chargement des articles en cours...</p>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.1.0/papaparse.min.js"></script>
+  <script>
+    var answerGiven = false;
+    var correctAnswer;
+    var articles;
+    var submitButton = document.getElementById("submit-button");
+    submitButton.addEventListener("click", checkAnswer);
+    var newQuestionButton = document.getElementById("new-question-button");
+    var loading = document.getElementById("loading");
+    loading.style.display = "block";
+    submitButton.style.display = "none";
+    newQuestionButton.style.display = "none";
+    document.addEventListener("keydown", function(event) {
+      if (event.keyCode === 13) {
+        event.preventDefault();
+        document.getElementById("submit-button").click();
+      }
+    });
+
+    Papa.parse("articles.csv", {
+      header: true,
+      download: true,
+      complete: function(results) {
+        articles = results.data;
+        loading.style.display = "none";
+        getRandomArticle();
+        submitButton.style.display = "block";
+        newQuestionButton.style.display = "block";
+        submitButton.removeAttribute("disabled");
+        newQuestionButton.removeAttribute("disabled");
+      }
+    });
+
+    function getRandomArticle() {
+      var randomIndex = Math.floor(Math.random() * articles.length);
+      var randomArticle = articles[randomIndex];
+      document.getElementById("question").innerHTML = "Quel est le code article pour " + randomArticle.name + " ?";
+      correctAnswer = randomArticle.code;
+      var imgSrc = '/images/' + randomArticle.code + '.png';
+      document.getElementById("imgArticle").src = imgSrc;
+      var answerButton = document.getElementById("answer-button");
+      var answerText = document.getElementById("answer-text");
+      answerButton.addEventListener("click", showAnswer);
+
+      function showAnswer() {
+      document.getElementById("answer-text").innerHTML = "La réponse est : " + correctAnswer;
+      answerGiven = true;
+      setTimeout(function() {
+        result.innerHTML = "";
+      }, 2000);
+}
+    }
+    // Récupérer la zone de texte
+var answerInput = document.getElementById("answer");
+
+// Restaurer la sélection de la zone de texte lors du chargement de la page
+if (localStorage.getItem("answerSelection")) {
+  var savedSelection = JSON.parse(localStorage.getItem("answerSelection"));
+  answerInput.setSelectionRange(savedSelection.start, savedSelection.end);
+}
+
+// Stocker la sélection de la zone de texte lors de la saisie de la réponse
+answerInput.addEventListener("input", function() {
+  localStorage.setItem("answerSelection", JSON.stringify({
+    start: answerInput.selectionStart,
+    end: answerInput.selectionEnd
+  }));
+});
+
+function fadeInImage() {
+  var imgArticle = document.getElementById("imgArticle");
+  imgArticle.classList.remove("fade-in");
+  void imgArticle.offsetWidth;
+  imgArticle.classList.add("fade-in");
+}
+function checkAnswer() {
+  var answer = document.getElementById("answer").value;
+  var result = document.getElementById("result");
+  if (answer == correctAnswer) {
+    result.innerHTML = "Bonne réponse!";
+    setTimeout(getRandomArticle, 1000);
+    document.getElementById("answer").value = "";
+    setTimeout(function() {
+      result.innerHTML = "";
+      getRandomArticle();
+      fadeInImage(); // appel de la fonction fadeInImage()
+    }, 1000);
+    var audio = new Audio('bienvulustucru.mp3');
+    audio.play();
+    if (answerGiven) {
+    document.getElementById("answer-text").innerHTML = "";
+    answerGiven = false;
+}
+  } else {
+    result.innerHTML = "Mauvaise réponse. Le code article pour " + randomArticle.name + " est " + correctAnswer + ".";
+  }
+  document.getElementById("answer").focus();
+  document.getElementById("resultText").style.display = "none";
+}
+</script>
+
+</body>
+</html>

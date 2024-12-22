@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Quiz des codes d'articles</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <style>
+    /* Styles existants */
+    ...
+  </style>
+</head>
+<body class="text-center">
+  <div class="gradient-bg">
+  <div class="container">
+    <h1 class="text-center">Quiz des codes d'articles</h1>
+    <!-- Ajout de l'élément HTML pour afficher le score -->
+    <p id="score" class="h4 text-center">Score : 0</p>
+    <form>
+      ...
+    </form>
+    <p id="result" class="h4 text-center"></p>
+    <p id="loading" class="h4 text-center" style="display:none;">Chargement des articles en cours...</p>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.1.0/papaparse.min.js"></script>
+  <script>
+    var answerGiven = false;
+    var correctAnswer;
+    var articles;
+    var submitButton = document.getElementById("submit-button");
+    submitButton.addEventListener("click", checkAnswer);
+    var newQuestionButton = document.getElementById("new-question-button");
+    var loading = document.getElementById("loading");
+    loading.style.display = "block";
+    submitButton.style.display = "none";
+    newQuestionButton.style.display = "none";
+    document.addEventListener("keydown", function(event) {
+      if (event.keyCode === 13) {
+        event.preventDefault();
+        document.getElementById("submit-button").click();
+      }
+    });
+
+    Papa.parse("articles.csv", {
+      header: true,
+      download: true,
+      complete: function(results) {
+        articles = results.data;
+        loading.style.display = "none";
+        getRandomArticle();
+        submitButton.style.display = "block";
+        newQuestionButton.style.display = "block";
+        submitButton.removeAttribute("disabled");
+        newQuestionButton.removeAttribute("disabled");
+      }
+    });
+
+    function getRandomArticle() {
+      ...
+    }
+
+    // Créer une variable pour stocker le score
+    var score = 0;
+
+    function updateScoreDisplay() {
+      document.getElementById("score").innerHTML = "Score : " + score;
+    }
+
+    // Récupérer la zone de texte
+    ...
+    
+    function fadeInImage() {
+      ...
+    }
+    
+    function checkAnswer() {
+      var answer = document.getElementById("answer").value;
+      var result = document.getElementById("result");
+      if (answer == correctAnswer) {
+        // Mettre à jour la variable de score lorsqu'une réponse correcte est donnée
+        score += 1;
+        // Mettre à jour l'affichage du score à chaque fois que la variable de score change
+        updateScoreDisplay();
+        
+        ...
+      } else {
+        ...
+      }
+      ...
+    }
+  </script>
+
+</body>
+</html>

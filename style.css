@@ -1,0 +1,13 @@
+.uk-container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .uk-card {
+    margin-bottom: 20px;
+  }
+  
+  .actions a {
+    margin-right: 10px;
+  }
+  

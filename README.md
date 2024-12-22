@@ -24,8 +24,7 @@ Toutes ces pages s’appuient sur un fichier CSV (`articles.csv`) qui contient l
 ## Installation
 
 1. **Cloner ou télécharger** le dépôt sur votre machine locale.  
-2. **Vérifier** que tous les fichiers (HTML, CSV, éventuellement `script.js` et `papaparse.js`) sont au bon endroit.  
-3. **Ouvrir** l’une des pages HTML au choix (par ex. `quizv2.html`) dans votre navigateur web.  
+2. **Ouvrir** l’une des pages HTML au choix (par ex. `quizv2.html`) dans votre navigateur web.  
 
 > **Remarque** :  
 > - Certains navigateurs **bloquent** la lecture de fichiers CSV en local. Pour éviter ce problème, vous pouvez lancer un petit serveur local (ex. via [live-server](https://www.npmjs.com/package/live-server) ou tout autre outil équivalent).  

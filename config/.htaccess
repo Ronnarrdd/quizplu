@@ -1,4 +1,4 @@
 AuthType Basic
 AuthName "Accès protégé par mot de passe"
-AuthUserFile .htpasswd
+AuthUserFile /config/.htpasswd
 Require valid-user

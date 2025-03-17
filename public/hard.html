@@ -105,7 +105,7 @@ body::before {
       }
     });
 
-    Papa.parse("hard.csv", {
+    Papa.parse("../src/data/hard.csv", {
       header: true,
       download: true,
       complete: function(results) {
@@ -124,7 +124,7 @@ body::before {
       var randomArticle = articles[randomIndex];
       document.getElementById("question").innerHTML = "Quel est le code article pour " + randomArticle.name + " ?";
       correctAnswer = randomArticle.code;
-      var imgSrc = '/test/v2/images/' + randomArticle.code + '.png';
+      var imgSrc = '../assets/images/' + randomArticle.code + '.png';
       document.getElementById("imgArticle").src = imgSrc;
       var answerButton = document.getElementById("answer-button");
       var answerText = document.getElementById("answer-text");
@@ -173,7 +173,7 @@ function checkAnswer() {
       getRandomArticle();
       fadeInImage(); // appel de la fonction fadeInImage()
     }, 1000);
-    var audio = new Audio('bienvulustucru.mp3');
+    var audio = new Audio('../assets/audio/bienvulustucru.mp3');
     audio.play();
     if (answerGiven) {
     document.getElementById("answer-text").innerHTML = "";
